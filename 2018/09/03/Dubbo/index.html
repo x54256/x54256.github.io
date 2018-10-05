@@ -1,4 +1,107 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Dubbo的使用，以及整合springboot | x5456</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Dubbo的使用，以及整合springboot</h1><a id="logo" href="/.">x5456</a><p class="description">x54256的博客</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Dubbo的使用，以及整合springboot</h1><div class="post-meta">Sep 3, 2018</div><div class="post-content"><h2 id="1、分布式基础理论"><a href="#1、分布式基础理论" class="headerlink" title="1、分布式基础理论"></a>1、分布式基础理论</h2><h3 id="1）什么是分布式系统？"><a href="#1）什么是分布式系统？" class="headerlink" title="1）什么是分布式系统？"></a>1）什么是分布式系统？</h3><p>《分布式系统原理与范型》定义：</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Dubbo的使用，以及整合springboot | x5456</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1、分布式基础理论1）什么是分布式系统？《分布式系统原理与范型》定义：  “分布式系统是若干独立计算机的集合，这些计算机对于用户来说就像单个相关系统”  分布式系统（distributed system）是建立在网络之上的软件系统。 2）发展演变 随着互联网的发展，网站应用的规模不断扩大，常规的垂直应用架构已无法应对，分布式服务架构以及流动计算架构势在必行，亟需一个治理系统确保架构有条不紊的演进。">
+<meta name="keywords" content="dubbo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo的使用，以及整合springboot">
+<meta property="og:url" content="https://x54256.github.io/2018/09/03/Dubbo/index.html">
+<meta property="og:site_name" content="x5456">
+<meta property="og:description" content="1、分布式基础理论1）什么是分布式系统？《分布式系统原理与范型》定义：  “分布式系统是若干独立计算机的集合，这些计算机对于用户来说就像单个相关系统”  分布式系统（distributed system）是建立在网络之上的软件系统。 2）发展演变 随着互联网的发展，网站应用的规模不断扩大，常规的垂直应用架构已无法应对，分布式服务架构以及流动计算架构势在必行，亟需一个治理系统确保架构有条不紊的演进。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/4AGjHHaeEe.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/FlkLDC7gjf.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/dgmhff7368.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/BjHeG2m139.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/gaLB9ai4DC.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/J9I5K7cE7e.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/Fef2GlJ4Kf.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/HiKEAF4b34.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/39Jk2iDdhE.png?imageslim">
+<meta property="og:image" content="c:/Users/x5456/AppData/Local/Temp/1535952686730.png">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/CfG7CGmhhg.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/09mjaC8AFF.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/j4IdBH7G3c.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/a42LC01A57.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/b3hLBLIf6I.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/Dkmk24C4LH.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/Fg6KmaB94F.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/b2a0k87Jcl.png?imageslim">
+<meta property="og:image" content="c:/Users/x5456/AppData/Local/Temp/1535957524273.png">
+<meta property="og:updated_time" content="2018-10-05T04:33:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dubbo的使用，以及整合springboot">
+<meta name="twitter:description" content="1、分布式基础理论1）什么是分布式系统？《分布式系统原理与范型》定义：  “分布式系统是若干独立计算机的集合，这些计算机对于用户来说就像单个相关系统”  分布式系统（distributed system）是建立在网络之上的软件系统。 2）发展演变 随着互联网的发展，网站应用的规模不断扩大，常规的垂直应用架构已无法应对，分布式服务架构以及流动计算架构势在必行，亟需一个治理系统确保架构有条不紊的演进。">
+<meta name="twitter:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/4AGjHHaeEe.png?imageslim">
+  
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">x5456</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">个人博客</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://x54256.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Dubbo" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/03/Dubbo/" class="article-date">
+  <time datetime="2018-09-03T01:28:33.000Z" itemprop="datePublished">2018-09-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Dubbo的使用，以及整合springboot
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1、分布式基础理论"><a href="#1、分布式基础理论" class="headerlink" title="1、分布式基础理论"></a>1、分布式基础理论</h2><h3 id="1）什么是分布式系统？"><a href="#1）什么是分布式系统？" class="headerlink" title="1）什么是分布式系统？"></a>1）什么是分布式系统？</h3><p>《分布式系统原理与范型》定义：</p>
 <blockquote>
 <p>“分布式系统是若干独立计算机的集合，这些计算机对于用户来说就像单个相关系统”</p>
 </blockquote>
@@ -186,4 +289,142 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span>(version = <span class="string">"1.0.0"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloServiceImpl</span> <span class="keyword">implements</span> <span class="title">HelloService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@HystrixCommand</span>(commandProperties = &#123;</span><br><span class="line">     <span class="meta">@HystrixProperty</span>(name = <span class="string">"circuitBreaker.requestVolumeThreshold"</span>, value = <span class="string">"10"</span>),</span><br><span class="line">     <span class="meta">@HystrixProperty</span>(name = <span class="string">"execution.isolation.thread.timeoutInMilliseconds"</span>, value = <span class="string">"2000"</span>) &#125;)</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// System.out.println("async provider received: " + name);</span></span><br><span class="line">        <span class="comment">// return "annotation: hello, " + name;</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Exception to show hystrix enabled."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="3、配置Consumer端"><a href="#3、配置Consumer端" class="headerlink" title="3、配置Consumer端"></a>3、配置Consumer端</h3><p>对于Consumer端，则可以增加一层method调用，并在method上配置@HystrixCommand。当调用出错时，会走到fallbackMethod = “reliable”的调用里。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Reference</span></span><br><span class="line"><span class="keyword">private</span> HelloService demoService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@HystrixCommand</span>(fallbackMethod = <span class="string">"reliable"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">doSayHello</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> demoService.sayHello(name);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">reliable</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"hystrix fallback value"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</div><div class="tags"><a href="/tags/dubbo/">dubbo</a></div><div class="post-nav"><a class="pre" href="/2018/09/11/Gradle+idea配置/">Gradle+idea的使用</a><a class="next" href="/2018/08/23/CentOS7下安装Oracle/">CentOS7下安装Oracle</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://x54256.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Gitlab/" style="font-size: 15px;">Gitlab</a> <a href="/tags/日常笔记/" style="font-size: 15px;">日常笔记</a> <a href="/tags/dubbo/" style="font-size: 15px;">dubbo</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/29/SpringBoot+SpringDataJpa进阶/">Jpa的分页和@Query注解的使用和复杂查询，boot排除自动配置类，为true才启用配置类，SQL分组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/28/CORS的原理及整合SpringBoot/">CORS的原理及整合SpringBoot</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/BS运维/">日常笔记：Dubbo的Filter，httpclient发送webservice请求，Hibranate注解使用，OSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/Spring注解使用 /">Spring注解使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/SpringBoot与Redis的整合/">SpringBoot与Redis的整合</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/24/gitlab+idea的使用/">Idea中使用Gitlab</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/11/Gradle+idea配置/">Gradle+idea的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/03/Dubbo/">Dubbo的使用，以及整合springboot</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/CentOS7下安装Oracle/">CentOS7下安装Oracle</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/21/Docker学习/">Docker入门使用</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.cnblogs.com/x54256" title="cnblogs" target="_blank">cnblogs</a><ul></ul><a href="https://github.com/x54256" title="git" target="_blank">git</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">x5456.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://x54256.github.io/2018/09/03/Dubbo/" data-id="cjmvxg1nt000izljed3e4evi1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dubbo/">dubbo</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/11/Gradle+idea配置/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Gradle+idea的使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/23/CentOS7下安装Oracle/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CentOS7下安装Oracle</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <!-- Featured Tags -->
+
+  
+    <!-- Short About -->
+<section class="visible-md visible-lg">
+    <h5><a href="/about/">ABOUT ME</a></h5>
+    <div class="short-about">
+
+        
+
+        
+
+        <!-- SNS Link -->
+        <ul class="list-inline">
+            
+            
+            
+
+            
+
+            
+
+            
+            
+            
+            
+        </ul>
+    </div>
+</section>
+
+  
+    
+  <h5>RECENT POSTS</h3>
+  <div class="widget">
+    <ul>
+      
+        <li>
+          <a href="/2018/09/29/SpringBoot+SpringDataJpa进阶/">Jpa的分页和@Query注解的使用和复杂查询，boot排除自动配置类，为true才启用配置类，SQL分组的使用</a>
+        </li>
+      
+        <li>
+          <a href="/2018/09/28/CORS的原理及整合SpringBoot/">CORS的原理及整合SpringBoot</a>
+        </li>
+      
+        <li>
+          <a href="/2018/09/27/BS运维/">日常笔记：Dubbo的Filter，httpclient发送webservice请求，Hibranate注解使用，OSS</a>
+        </li>
+      
+        <li>
+          <a href="/2018/09/27/Spring注解使用 /">Spring注解使用</a>
+        </li>
+      
+        <li>
+          <a href="/2018/09/26/SpringBoot与Redis的整合/">SpringBoot与Redis的整合</a>
+        </li>
+      
+    </ul>
+  </div>
+
+  
+    <!-- Friends Blog -->
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Yujx<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
