@@ -1,68 +1,299 @@
-extends base
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
 
-block title
-  title= page.title + ' | ' + config.title
+  
+  <title>CORS的原理及整合SpringBoot | x5456</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文全部取自：http://www.spring4all.com/article/177 一、基本介绍简单来说，CORS是一种访问机制，英文全称是Cross-Origin Resource Sharing，即我们常说的跨域资源共享，通过在服务器端设置响应头，把发起跨域的原始域名添加到Access-Control-Allow-Origin 即可。 1. CORS工作原理CORS实现跨域访问并不是一蹴">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CORS的原理及整合SpringBoot">
+<meta property="og:url" content="https://x54256.github.io/2018/09/28/CORS的原理及整合SpringBoot/index.html">
+<meta property="og:site_name" content="x5456">
+<meta property="og:description" content="本文全部取自：http://www.spring4all.com/article/177 一、基本介绍简单来说，CORS是一种访问机制，英文全称是Cross-Origin Resource Sharing，即我们常说的跨域资源共享，通过在服务器端设置响应头，把发起跨域的原始域名添加到Access-Control-Allow-Origin 即可。 1. CORS工作原理CORS实现跨域访问并不是一蹴">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180928/cg1GgCBekG.png?imageslim">
+<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180928/k55EA2ea6K.png?imageslim">
+<meta property="og:updated_time" content="2018-09-28T02:29:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CORS的原理及整合SpringBoot">
+<meta name="twitter:description" content="本文全部取自：http://www.spring4all.com/article/177 一、基本介绍简单来说，CORS是一种访问机制，英文全称是Cross-Origin Resource Sharing，即我们常说的跨域资源共享，通过在服务器端设置响应头，把发起跨域的原始域名添加到Access-Control-Allow-Origin 即可。 1. CORS工作原理CORS实现跨域访问并不是一蹴">
+<meta name="twitter:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180928/cg1GgCBekG.png?imageslim">
+  
+    <link rel="alternate" href="/atom.xml" title="x5456" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
 
-block content
-  .post
-    h1.post-title= page.title
-    .post-meta= page.date.format('ll')
-      if page.categories.length > 0
-        span= ' | '
-        span.category
-          for category in page.categories.toArray()
-            a(href=url_for(category.path))= category.name
-      if theme.busuanzi == true
-        script(src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js', async)
-        span#busuanzi_container_page_pv= ' | '
-          span#busuanzi_value_page_pv
-          span= ' ' + __('Hits')
-      if theme.wordcount == true
-        include _partial/wordcount.pug
-    if theme.disqus
-      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
-    if theme.changyan
-      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
-        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
-        span= ' ' + __('Comment')
-      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
-    if theme.valine.enable
-      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
-        span.valine-comment-count(data-xid=url_for(page.path))
-        span= ' ' + __('Comment')
-    if page.toc
-      div(class='clear')
-        div(id='toc' class='toc-article')
-          div(class='toc-title')= __('contents')
-          != toc(page.content, {list_number: theme.toc_number})
-    .post-content
-      != page.content
-    if theme.donate.enable == true
-      iframe(src='/donate/?AliPayQR=' + theme.donate.alipay_qr + '&WeChatQR=' + theme.donate.wechat_qr + '&GitHub=' + theme.donate.github + '&BTCQR=' + theme.donate.btc_qr + '&BTCKEY='+ theme.donate.btc_key + '&PayPal=' + theme.donate.paypal_url, style='overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;', frameborder='0', scrolling='no')
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">x5456</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">x54256的博客</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://x54256.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CORS的原理及整合SpringBoot" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/28/CORS的原理及整合SpringBoot/" class="article-date">
+  <time datetime="2018-09-28T02:28:33.000Z" itemprop="datePublished">2018-09-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CORS的原理及整合SpringBoot
+    </h1>
+  
 
-    if theme.post_copyright.enable == true
-      div
-        ul.post-copyright
-          li.post-copyright-author
-            strong= __('copyright_author_prefix')
-            = theme.post_copyright.author
-          li.post-copyright-link
-            strong= __('copyright_link_prefix')
-            a(href='/' + page.path)= page.permalink
-          li.post-copyright-license
-            strong= __('copyright_declare_prefix')
-            if theme.post_copyright.copyright_text
-              != theme.post_copyright.copyright_text
-            else
-              != __('copyright_default_text')
-      br
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文全部取自：<a href="http://www.spring4all.com/article/177" target="_blank" rel="noopener">http://www.spring4all.com/article/177</a></p>
+<h2 id="一、基本介绍"><a href="#一、基本介绍" class="headerlink" title="一、基本介绍"></a>一、基本介绍</h2><p>简单来说，CORS是一种访问机制，英文全称是Cross-Origin Resource Sharing，即我们常说的跨域资源共享，通过在服务器端设置响应头，把发起跨域的原始域名添加到Access-Control-Allow-Origin 即可。</p>
+<h3 id="1-CORS工作原理"><a href="#1-CORS工作原理" class="headerlink" title="1. CORS工作原理"></a>1. CORS工作原理</h3><p>CORS实现跨域访问并不是一蹴而就的，需要借助浏览器的支持，从原理题图我们可以清楚看到，简单的请求（通常指GET/POST/HEAD方式，并没有去增加额外的请求头信息）直接创建了跨域请求的XHR对象，而复杂的请求则要求先发送一个”预检”请求，待服务器批准后才能真正发起跨域访问请求。</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180928/cg1GgCBekG.png?imageslim" alt="mark"></p>
+<p>根据官方文档<a href="https://www.w3.org/TR/cors/" target="_blank" rel="noopener">W3C规范-CORS</a> 的描述，目前CORS使用了如下头部信息：</p>
+<blockquote>
+<p>注：请求头信息由浏览器检测到跨域自动添加，无需过多干预，重点放在Response headers，它可以帮助我们在服务器进行跨域授权，例如允许哪些原始域可放行，是否需要携带Cookie信息等。</p>
+</blockquote>
+<h3 id="2-Request-Headers（请求头）"><a href="#2-Request-Headers（请求头）" class="headerlink" title="2. Request Headers（请求头）"></a>2. Request Headers（请求头）</h3><ul>
+<li><h4 id="Origin"><a href="#Origin" class="headerlink" title="Origin"></a>Origin</h4><p>表示跨域请求的原始域。</p>
+</li>
+<li><h4 id="Access-Control-Request-Method"><a href="#Access-Control-Request-Method" class="headerlink" title="Access-Control-Request-Method"></a>Access-Control-Request-Method</h4><p>表示跨域请求的方式。（如GET/POST）</p>
+</li>
+<li><h4 id="Access-Control-Request-Headers"><a href="#Access-Control-Request-Headers" class="headerlink" title="Access-Control-Request-Headers"></a>Access-Control-Request-Headers</h4><p>表示跨域请求的请求头信息。</p>
+</li>
+</ul>
+<h3 id="3-Response-headers（响应头-）"><a href="#3-Response-headers（响应头-）" class="headerlink" title="3. Response headers（响应头 ）"></a>3. Response headers（响应头 ）</h3><ul>
+<li><h4 id="Access-Control-Allow-Origin"><a href="#Access-Control-Allow-Origin" class="headerlink" title="Access-Control-Allow-Origin"></a>Access-Control-Allow-Origin</h4><p>表示允许哪些原始域进行跨域访问。（字符数组）</p>
+</li>
+<li><h4 id="Access-Control-Allow-Credentials"><a href="#Access-Control-Allow-Credentials" class="headerlink" title="Access-Control-Allow-Credentials"></a>Access-Control-Allow-Credentials</h4><p>表示是否允许客户端获取用户凭据。（布尔类型）</p>
+<p>使用场景：例如现在从浏览器发起跨域请求，并且要附带Cookie信息给服务器。则必须具备两个条件：</p>
+<p>1.浏览器端：</p>
+<p>发送AJAX请求前需设置通信对象XHR的withCredentials 属性为true。</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180928/k55EA2ea6K.png?imageslim" alt="mark"></p>
+<p>2.服务器端：</p>
+<p>设置Access-Control-Allow-Credentials为true。两个条件缺一不可，否则即使服务器同意发送Cookie，浏览器也无法获取。正确姿势如下：</p>
+<ul>
+<li><h4 id="Access-Control-Allow-Methods"><a href="#Access-Control-Allow-Methods" class="headerlink" title="Access-Control-Allow-Methods"></a>Access-Control-Allow-Methods</h4><p>表示跨域请求的方式的允许范围。（例如只授权GET/POST）</p>
+</li>
+<li><h4 id="Access-Control-Allow-Headers"><a href="#Access-Control-Allow-Headers" class="headerlink" title="Access-Control-Allow-Headers"></a>Access-Control-Allow-Headers</h4><p>表示跨域请求的头部的允许范围。</p>
+</li>
+<li><h4 id="Access-Control-Expose-Headers"><a href="#Access-Control-Expose-Headers" class="headerlink" title="Access-Control-Expose-Headers"></a>Access-Control-Expose-Headers</h4><p>表示暴露哪些头部信息，并提供给客户端。（因为基于安全考虑，如果没有设置额外的暴露，跨域的通信对象XMLHttpRequest只能获取标准的头部信息）</p>
+</li>
+<li><h4 id="Access-Control-Max-Age"><a href="#Access-Control-Max-Age" class="headerlink" title="Access-Control-Max-Age"></a>Access-Control-Max-Age</h4><p>表示预检请求的最大缓存时间。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="二、SpringBoot-CORS实现跨域访问"><a href="#二、SpringBoot-CORS实现跨域访问" class="headerlink" title="二、SpringBoot+CORS实现跨域访问"></a>二、SpringBoot+CORS实现跨域访问</h2><h3 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h3><ul>
+<li>方式1：返回新的CorsFilter</li>
+<li>方式2：重写WebMvcConfigurer</li>
+<li>方式3：使用注解（<a href="https://github.com/CrossOrigin" target="_blank" rel="noopener">@CrossOrigin</a>）</li>
+<li>方式4：手工设置响应头（HttpServletResponse ）</li>
+</ul>
+<blockquote>
+<p>注：CorsFilter / WebMvcConfigurer / <a href="https://github.com/CrossOrigin" target="_blank" rel="noopener">@CrossOrigin</a> 需要SpringMVC 4.2 以上的版本才支持，对应SpringBoot 1.3 版本以上都支持这些CORS特性。不过，使用SpringMVC4.2 以下版本的小伙伴也不用慌，直接使用方式4通过手工添加响应头来授权CORS跨域访问也是可以的。附：在SpringBoot 1.2.8 + SpringMVC 4.1.9 亲测成功。</p>
+<p>注：方式1和方式2属于全局CORS配置，方式3和方式4属于局部CORS配置。如果使用了局部跨域是会覆盖全局跨域的规则，所以可以通过<a href="https://github.com/CrossOrigin" target="_blank" rel="noopener">@CrossOrigin</a>注解来进行细粒度更高的跨域资源控制。</p>
+</blockquote>
+<h4 id="1-返回新的CorsFilter（全局跨域）"><a href="#1-返回新的CorsFilter（全局跨域）" class="headerlink" title="1. 返回新的CorsFilter（全局跨域）"></a>1. 返回新的CorsFilter（全局跨域）</h4><p>在任意配置类，返回一个新的CorsFilter Bean，并添加映射路径和具体的CORS配置信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hehe.yyweb.config;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GlobalCorsConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsFilter <span class="title">corsFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//1.添加CORS配置信息</span></span><br><span class="line">        CorsConfiguration config = <span class="keyword">new</span> CorsConfiguration();</span><br><span class="line">          <span class="comment">//放行哪些原始域</span></span><br><span class="line">          config.addAllowedOrigin(<span class="string">"*"</span>);</span><br><span class="line">          <span class="comment">//是否发送Cookie信息</span></span><br><span class="line">          config.setAllowCredentials(<span class="keyword">true</span>);</span><br><span class="line">          <span class="comment">//放行哪些原始域(请求方式)</span></span><br><span class="line">          config.addAllowedMethod(<span class="string">"*"</span>);</span><br><span class="line">          <span class="comment">//放行哪些原始域(头部信息)</span></span><br><span class="line">          config.addAllowedHeader(<span class="string">"*"</span>);</span><br><span class="line">          <span class="comment">//暴露哪些头部信息（因为跨域访问默认不能获取全部头部信息）</span></span><br><span class="line">          config.addExposedHeader(<span class="string">"*"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//2.添加映射路径</span></span><br><span class="line">        UrlBasedCorsConfigurationSource configSource = <span class="keyword">new</span> UrlBasedCorsConfigurationSource();</span><br><span class="line">        configSource.registerCorsConfiguration(<span class="string">"/**"</span>, config);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//3.返回新的CorsFilter.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsFilter(configSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-重写WebMvcConfigurer（全局跨域）"><a href="#2-重写WebMvcConfigurer（全局跨域）" class="headerlink" title="2. 重写WebMvcConfigurer（全局跨域）"></a>2. 重写WebMvcConfigurer（全局跨域）</h4><p>在任意配置类，返回一个新的WebMvcConfigurer Bean，并重写其提供的跨域请求处理的接口，目的是添加映射路径和具体的CORS配置信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hehe.yyweb.config;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GlobalCorsConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> WebMvcConfigurer <span class="title">corsConfigurer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> WebMvcConfigurer() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="comment">//重写父类提供的跨域请求处理的接口</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</span><br><span class="line">                <span class="comment">//添加映射路径</span></span><br><span class="line">                registry.addMapping(<span class="string">"/**"</span>)</span><br><span class="line">                        <span class="comment">//放行哪些原始域</span></span><br><span class="line">                        .allowedOrigins(<span class="string">"*"</span>)</span><br><span class="line">                        <span class="comment">//是否发送Cookie信息</span></span><br><span class="line">                        .allowCredentials(<span class="keyword">true</span>)</span><br><span class="line">                        <span class="comment">//放行哪些原始域(请求方式)</span></span><br><span class="line">                        .allowedMethods(<span class="string">"GET"</span>,<span class="string">"POST"</span>, <span class="string">"PUT"</span>, <span class="string">"DELETE"</span>)</span><br><span class="line">                        <span class="comment">//放行哪些原始域(头部信息)</span></span><br><span class="line">                        .allowedHeaders(<span class="string">"*"</span>)</span><br><span class="line">                        <span class="comment">//暴露哪些头部信息（因为跨域访问默认不能获取全部头部信息）</span></span><br><span class="line">                        .exposedHeaders(<span class="string">"Header1"</span>, <span class="string">"Header2"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-使用注解（局部跨域）"><a href="#3-使用注解（局部跨域）" class="headerlink" title="3. 使用注解（局部跨域）"></a>3. 使用注解（局部跨域）</h4><p>在方法上（<a href="https://github.com/RequestMapping" target="_blank" rel="noopener">@RequestMapping</a>）使用注解 <strong>@CrossOrigin</strong> ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@CrossOrigin</span>(<span class="string">"http://localhost:8080"</span>) </span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">index</span><span class="params">( )</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者在控制器（<a href="https://github.com/Controller" target="_blank" rel="noopener">@Controller</a>）上使用注解 <strong>@CrossOrigin</strong> ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@CrossOrigin</span>(origins = <span class="string">"http://xx-domain.com"</span>, maxAge = <span class="number">3600</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AccountController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">index</span><span class="params">( )</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-手工设置响应头（局部跨域-）"><a href="#4-手工设置响应头（局部跨域-）" class="headerlink" title="4. 手工设置响应头（局部跨域 ）"></a>4. 手工设置响应头（局部跨域 ）</h4><p>使用HttpServletResponse对象添加响应头（Access-Control-Allow-Origin）来授权原始域，这里Origin的值也可以设置为”*” ，表示全部放行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">index</span><span class="params">(HttpServletResponse response)</span></span>&#123;</span><br><span class="line">    response.addHeader(<span class="string">"Access-Control-Allow-Origin"</span>, <span class="string">"http://localhost:8080"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="三、测试跨域访问"><a href="#三、测试跨域访问" class="headerlink" title="三、测试跨域访问"></a>三、测试跨域访问</h2><p>首先使用<a href="http://www.jianshu.com/p/d2b08a671e27" target="_blank" rel="noopener"> Spring Initializr </a>快速构建一个Maven工程，什么都不用改，在static目录下，添加一个页面：index.html 来模拟跨域访问。目标地址: <a href="http://localhost:8090/hello" target="_blank" rel="noopener">http://localhost:8090/hello</a></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Page Index<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>前台系统<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"info"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"webjars/jquery/3.2.1/jquery.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">    $.ajax(&#123;</span></span><br><span class="line"><span class="undefined">        url: 'http://localhost:8090/hello',</span></span><br><span class="line"><span class="undefined">        type: "POST",</span></span><br><span class="line"><span class="undefined">        success: function (data) &#123;</span></span><br><span class="line"><span class="undefined">            $("#info").html("跨域访问成功:"+data);</span></span><br><span class="line"><span class="undefined">        &#125;,</span></span><br><span class="line"><span class="undefined">        error: function (data) &#123;</span></span><br><span class="line"><span class="undefined">            $("#info").html("跨域失败!!");</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;)</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后创建另一个工程，在Root Package添加Config目录并创建配置类来开启全局CORS。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hehe.yyweb.config;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GlobalCorsConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> WebMvcConfigurer <span class="title">corsConfigurer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> WebMvcConfigurer() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</span><br><span class="line">                registry.addMapping(<span class="string">"/**"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着，简单编写一个Rest接口 ，并指定应用端口为8090。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hehe.yyweb;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">YyWebApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TomcatServletWebServerFactory <span class="title">tomcat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        TomcatServletWebServerFactory tomcatFactory = <span class="keyword">new</span> TomcatServletWebServerFactory();</span><br><span class="line">        tomcatFactory.setPort(<span class="number">8090</span>); <span class="comment">//默认启动8090端口</span></span><br><span class="line">        <span class="keyword">return</span> tomcatFactory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">index</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(YyWebApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后分别启动两个应用，然后在浏览器访问：<a href="http://localhost:8080/index.html" target="_blank" rel="noopener">http://localhost:8080/index.html</a> ，可以正常接收JSON数据，说明跨域访问成功！！</p>
 
-    if theme.shareto == true
-      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
-      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://x54256.github.io/2018/09/28/CORS的原理及整合SpringBoot/" data-id="cjmvjtiwt000c9djennybau1w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
 
-    include _partial/tag.pug
-    include _partial/post_nav.pug
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/29/SpringBoot+SpringDataJpa进阶/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Jpa的分页和@Query注解的使用和复杂查询，boot排除自动配置类，为true才启用配置类，SQL分组的使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/27/BS运维/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">日常笔记：Dubbo的Filter，httpclient发送webservice请求，Hibranate注解使用，OSS</div>
+    </a>
+  
+</nav>
 
-    if page.comments
-      include _partial/comments.pug
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/">Gitlab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/">Gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日常笔记/">日常笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Gitlab/" style="font-size: 10px;">Gitlab</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/Spring/" style="font-size: 20px;">Spring</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/日常笔记/" style="font-size: 15px;">日常笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/29/SpringBoot+SpringDataJpa进阶/">Jpa的分页和@Query注解的使用和复杂查询，boot排除自动配置类，为true才启用配置类，SQL分组的使用</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/28/CORS的原理及整合SpringBoot/">CORS的原理及整合SpringBoot</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/27/BS运维/">日常笔记：Dubbo的Filter，httpclient发送webservice请求，Hibranate注解使用，OSS</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/27/Spring注解使用 /">Spring注解使用</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/26/SpringBoot与Redis的整合/">SpringBoot与Redis的整合</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Yujx<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
