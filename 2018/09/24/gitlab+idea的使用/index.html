@@ -1,276 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
+extends base
 
-  
-  <title>Idea中使用Gitlab | x5456</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Idea中使用Gitlab一、项目下载1、配置git的位置  2、选择git导入项目  弹出这个界面  仓库的地址从这里获取  当项目下载成功后，会弹出下面的对话框，==直接关闭它==，并手动open下载的项目  二、上传修改的文件当打开下载完成的项目，会发现多了个Git菜单，我们就使用这个菜单进行各种操作 1、选择Git-&amp;gt;add，将项目中的文件加入到git add 中等待本地提交。 ad">
-<meta name="keywords" content="Gitlab">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Idea中使用Gitlab">
-<meta property="og:url" content="https://x54256.github.io/2018/09/24/gitlab+idea的使用/index.html">
-<meta property="og:site_name" content="x5456">
-<meta property="og:description" content="Idea中使用Gitlab一、项目下载1、配置git的位置  2、选择git导入项目  弹出这个界面  仓库的地址从这里获取  当项目下载成功后，会弹出下面的对话框，==直接关闭它==，并手动open下载的项目  二、上传修改的文件当打开下载完成的项目，会发现多了个Git菜单，我们就使用这个菜单进行各种操作 1、选择Git-&amp;gt;add，将项目中的文件加入到git add 中等待本地提交。 ad">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/KgEA10L75a.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/I8dk0GAGba.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/lfGAlalh8b.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/h2d1g4IC1d.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/84cKj37Cb8.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/K820dD1jk0.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/ccb6BcDH2K.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/ad3cbHda0K.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/ig30dhflJK.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/hikgJkIkHG.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/27kj8f40C5.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/3DKf3jJehK.png?imageslim">
-<meta property="og:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/l4JeDKC8f5.png?imageslim">
-<meta property="og:updated_time" content="2018-09-27T05:17:44.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Idea中使用Gitlab">
-<meta name="twitter:description" content="Idea中使用Gitlab一、项目下载1、配置git的位置  2、选择git导入项目  弹出这个界面  仓库的地址从这里获取  当项目下载成功后，会弹出下面的对话框，==直接关闭它==，并手动open下载的项目  二、上传修改的文件当打开下载完成的项目，会发现多了个Git菜单，我们就使用这个菜单进行各种操作 1、选择Git-&amp;gt;add，将项目中的文件加入到git add 中等待本地提交。 ad">
-<meta name="twitter:image" content="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/KgEA10L75a.png?imageslim">
-  
-    <link rel="alternate" href="/atom.xml" title="x5456" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+block title
+  title= page.title + ' | ' + config.title
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">x5456</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">x54256的博客</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://x54256.github.io"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-gitlab+idea的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/24/gitlab+idea的使用/" class="article-date">
-  <time datetime="2018-09-24T01:33:33.000Z" itemprop="datePublished">2018-09-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Idea中使用Gitlab
-    </h1>
-  
+block content
+  .post
+    h1.post-title= page.title
+    .post-meta= page.date.format('ll')
+      if page.categories.length > 0
+        span= ' | '
+        span.category
+          for category in page.categories.toArray()
+            a(href=url_for(category.path))= category.name
+      if theme.busuanzi == true
+        script(src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js', async)
+        span#busuanzi_container_page_pv= ' | '
+          span#busuanzi_value_page_pv
+          span= ' ' + __('Hits')
+      if theme.wordcount == true
+        include _partial/wordcount.pug
+    if theme.disqus
+      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
+    if theme.changyan
+      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
+        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
+        span= ' ' + __('Comment')
+      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
+    if theme.valine.enable
+      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
+        span.valine-comment-count(data-xid=url_for(page.path))
+        span= ' ' + __('Comment')
+    if page.toc
+      div(class='clear')
+        div(id='toc' class='toc-article')
+          div(class='toc-title')= __('contents')
+          != toc(page.content, {list_number: theme.toc_number})
+    .post-content
+      != page.content
+    if theme.donate.enable == true
+      iframe(src='/donate/?AliPayQR=' + theme.donate.alipay_qr + '&WeChatQR=' + theme.donate.wechat_qr + '&GitHub=' + theme.donate.github + '&BTCQR=' + theme.donate.btc_qr + '&BTCKEY='+ theme.donate.btc_key + '&PayPal=' + theme.donate.paypal_url, style='overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;', frameborder='0', scrolling='no')
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Idea中使用Gitlab"><a href="#Idea中使用Gitlab" class="headerlink" title="Idea中使用Gitlab"></a>Idea中使用Gitlab</h2><h3 id="一、项目下载"><a href="#一、项目下载" class="headerlink" title="一、项目下载"></a>一、项目下载</h3><p>1、配置git的位置</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/KgEA10L75a.png?imageslim" alt="mark"></p>
-<p>2、选择git导入项目</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/I8dk0GAGba.png?imageslim" alt="mark"></p>
-<p>弹出这个界面</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/lfGAlalh8b.png?imageslim" alt="mark"></p>
-<p>仓库的地址从这里获取</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/h2d1g4IC1d.png?imageslim" alt="mark"></p>
-<p>当项目下载成功后，会弹出下面的对话框，==直接关闭它==，并手动open下载的项目</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/84cKj37Cb8.png?imageslim" alt="mark"></p>
-<h3 id="二、上传修改的文件"><a href="#二、上传修改的文件" class="headerlink" title="二、上传修改的文件"></a>二、上传修改的文件</h3><p>当打开下载完成的项目，会发现多了个Git菜单，我们就使用这个菜单进行各种操作</p>
-<h4 id="1、选择Git-gt-add，将项目中的文件加入到git-add-中等待本地提交。"><a href="#1、选择Git-gt-add，将项目中的文件加入到git-add-中等待本地提交。" class="headerlink" title="1、选择Git-&gt;add，将项目中的文件加入到git add 中等待本地提交。"></a>1、选择<code>Git-&gt;add</code>，将项目中的文件加入到git add 中等待本地提交。</h4><p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/K820dD1jk0.png?imageslim" alt="mark"></p>
-<p>add 后文件都会由<code>橙色</code>变成 <code>绿色</code></p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/ccb6BcDH2K.png?imageslim" alt="mark"></p>
-<h4 id="2、将本地代码上传到暂存区"><a href="#2、将本地代码上传到暂存区" class="headerlink" title="2、将本地代码上传到暂存区"></a>2、将本地代码上传到暂存区</h4><p>右击项目，选择 <code>Git-&gt;Commit Directory...</code></p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/ad3cbHda0K.png?imageslim" alt="mark"></p>
-<p>点击之后会弹出下面的对话框，选则修改的文件和提交信息之后点击commit，就会将代码存入==暂存区==</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/ig30dhflJK.png?imageslim" alt="mark"></p>
-<p><code>Performing Code Analysis</code>提示，有时候会很慢，这个功能是它对代码进行分析，查找错误，并提醒你是否修改。每次提交前都要查询一次，很麻烦，可以关闭该功能。</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/hikgJkIkHG.png?imageslim" alt="mark"></p>
-<p>这时本地提交成功，可以看见颜色 从 <code>绿色</code> 变成 了<code>黑色</code>。</p>
-<h4 id="3、将代码push到远程-git-仓库"><a href="#3、将代码push到远程-git-仓库" class="headerlink" title="3、将代码push到远程 git 仓库"></a>3、将代码push到远程 git 仓库</h4><p>代码Pull 远程前，必须先要进行本地Commit完毕。</p>
-<p>右击项目 <code>Git-&gt; Repository -&gt; Push</code> </p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/27kj8f40C5.png?imageslim" alt="mark"></p>
-<p>点击<code>Define remote</code> 设置一个远程Git 仓库</p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/3DKf3jJehK.png?imageslim" alt="mark"></p>
-<p>push成功，然后就上传到gitlab上了</p>
-<h3 id="三、本地与gitlab上代码冲突解决"><a href="#三、本地与gitlab上代码冲突解决" class="headerlink" title="三、本地与gitlab上代码冲突解决"></a>三、本地与gitlab上代码冲突解决</h3><p>看这篇文章就好了：<a href="https://blog.csdn.net/jc_zhibaobao/article/details/76339044" target="_blank" rel="noopener">https://blog.csdn.net/jc_zhibaobao/article/details/76339044</a></p>
-<p><strong>本文参考：<a href="https://www.cnblogs.com/x54256/p/8183123.html" target="_blank" rel="noopener">文章1</a>，<a href="https://blog.csdn.net/zsq520520/article/details/51004721" target="_blank" rel="noopener">文章2</a></strong></p>
-<p>注：<a href="https://blog.csdn.net/u010237107/article/details/50910879" target="_blank" rel="noopener">第一次项目上传</a></p>
-<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/180927/l4JeDKC8f5.png?imageslim" alt="mark"></p>
+    if theme.post_copyright.enable == true
+      div
+        ul.post-copyright
+          li.post-copyright-author
+            strong= __('copyright_author_prefix')
+            = theme.post_copyright.author
+          li.post-copyright-link
+            strong= __('copyright_link_prefix')
+            a(href='/' + page.path)= page.permalink
+          li.post-copyright-license
+            strong= __('copyright_declare_prefix')
+            if theme.post_copyright.copyright_text
+              != theme.post_copyright.copyright_text
+            else
+              != __('copyright_default_text')
+      br
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://x54256.github.io/2018/09/24/gitlab+idea的使用/" data-id="cjmvjtiwh00049djedej7d7qb" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gitlab/">Gitlab</a></li></ul>
+    if theme.shareto == true
+      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
+      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
 
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2018/09/26/SpringBoot与Redis的整合/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          SpringBoot与Redis的整合
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2018/09/11/Gradle+idea配置/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Gradle+idea的使用</div>
-    </a>
-  
-</nav>
+    include _partial/tag.pug
+    include _partial/post_nav.pug
 
-  
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/">Gitlab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/">Gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dubbo/">dubbo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日常笔记/">日常笔记</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Gitlab/" style="font-size: 10px;">Gitlab</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/Spring/" style="font-size: 20px;">Spring</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/日常笔记/" style="font-size: 15px;">日常笔记</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/09/29/SpringBoot+SpringDataJpa进阶/">Jpa的分页和@Query注解的使用和复杂查询，boot排除自动配置类，为true才启用配置类，SQL分组的使用</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/28/CORS的原理及整合SpringBoot/">CORS的原理及整合SpringBoot</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/27/BS运维/">日常笔记：Dubbo的Filter，httpclient发送webservice请求，Hibranate注解使用，OSS</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/27/Spring注解使用 /">Spring注解使用</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/26/SpringBoot与Redis的整合/">SpringBoot与Redis的整合</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 Yujx<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-
-
-  </div>
-</body>
-</html>
+    if page.comments
+      include _partial/comments.pug
