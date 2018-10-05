@@ -1,68 +1,157 @@
-extends base
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Docker入门使用 | x5456</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Docker入门使用</h1><a id="logo" href="/.">x5456</a><p class="description">x54256的博客</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Docker入门使用</h1><div class="post-meta">Aug 21, 2018</div><div class="post-content"><h1 id="一、Docker简介"><a href="#一、Docker简介" class="headerlink" title="一、Docker简介"></a>一、Docker简介</h1><p>由于在项目部署的时候经常会出现在本机上运行是好使的，但是部署到服务器上时出现各种问题，而这种问题的原因经常是因为环境的问题，所以Docker出现了。</p>
+<p>Docker 是基于Go语言实现的开源项目。</p>
+<p>Docker是在Linux容器技术的基础上发展出来的。我们可以将应用运行在Docker容器上，而Docker容器在任何操作系统上都是一致的。</p>
+<p>Docker主要通过对应用组件的封装、分发、部署、运行等进行管理，来实现用户的app及其运行环境能够做到<strong>一次封装，到处运行</strong>。</p>
+<h1 id="二、Docker的安装"><a href="#二、Docker的安装" class="headerlink" title="二、Docker的安装"></a>二、Docker的安装</h1><h2 id="1、Ubuntu安装Docker"><a href="#1、Ubuntu安装Docker" class="headerlink" title="1、Ubuntu安装Docker"></a>1、Ubuntu安装Docker</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo apt install docker.io</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> sudo systemctl start docker</span><br><span class="line"><span class="meta">$</span> sudo systemctl enable docker</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 查看是否安装成功</span><br><span class="line"><span class="meta">$</span> docker -v</span><br><span class="line"><span class="meta">&gt;</span>&gt; Docker version 17.12.1-ce, build 7390fc6</span><br></pre></td></tr></table></figure>
+<h2 id="2、配置阿里云镜像加速"><a href="#2、配置阿里云镜像加速" class="headerlink" title="2、配置阿里云镜像加速"></a>2、配置阿里云镜像加速</h2><p>1）访问<a href="https://cr.console.aliyun.com/cn-hangzhou/mirrors" target="_blank" rel="noopener">网址</a>获取个人的加速器地址</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/B9eLLEbak7.png?imageslim" alt=""></p>
+<p>2）按照下面的操作文档进行操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-'EOF'</span><br><span class="line">&#123;</span><br><span class="line">  "registry-mirrors": ["https://l7s5cnt9.mirror.aliyuncs.com"]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+<h2 id="3、hello，world"><a href="#3、hello，world" class="headerlink" title="3、hello，world"></a>3、hello，world</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 非管理员用户要加sudo</span><br><span class="line"><span class="meta">$</span> sudo docker run hello-world</span><br></pre></td></tr></table></figure>
+<p><img src="C:\Users\x5456\AppData\Local\Temp\1533623675145.png" alt="1533623675145"></p>
+<h2 id="4、Docker是怎么工作的"><a href="#4、Docker是怎么工作的" class="headerlink" title="4、Docker是怎么工作的"></a>4、Docker是怎么工作的</h2><pre><code>Docker是一个CS结构的系统，Docker的守护进程运行在主机上，客户端通过socket连接与守护进程进行传输命令，守护进程接受命令并管理运行在主机上的容器。
 
-block title
-  title= page.title + ' | ' + config.title
+一个主机上可能有多个容器，每个中运行着镜像（tomcat、mysql...）的实例。
+</code></pre><p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/Hb4FkGjDKB.png?imageslim" alt=""> </p>
+<h2 id="5、Docker为什么比虚拟机快"><a href="#5、Docker为什么比虚拟机快" class="headerlink" title="5、Docker为什么比虚拟机快"></a>5、Docker为什么比虚拟机快</h2><p><a href="https://www.cnblogs.com/doublegi/p/5923898.html" target="_blank" rel="noopener">详情请见</a></p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/ECIIdefiGA.png?imageslim" alt=""></p>
+<p>（1）由上图可以看出Docker比虚拟机少了抽象层Hypervisor，Docker不需要Hypervisor来实现硬件资源虚拟化，而是直接采用宿主的硬件资源。</p>
+<p>（2）而且Docker采用的是宿主机的内核，所以新建一个容器时不需要像虚拟机那样重新加载操作系统内核，从而避免引导、加载系统内核这个耗时的操作。</p>
+<h1 id="三、常用命令"><a href="#三、常用命令" class="headerlink" title="三、常用命令"></a>三、常用命令</h1><h2 id="1、帮助命令"><a href="#1、帮助命令" class="headerlink" title="1、帮助命令"></a>1、帮助命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker --help</span><br></pre></td></tr></table></figure>
+<h2 id="2、镜像命令"><a href="#2、镜像命令" class="headerlink" title="2、镜像命令"></a>2、镜像命令</h2><h3 id="1）查看本地主机中的所有镜像"><a href="#1）查看本地主机中的所有镜像" class="headerlink" title="1）查看本地主机中的所有镜像"></a>1）查看本地主机中的所有镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker images</span><br><span class="line"></span><br><span class="line">	Option：</span><br><span class="line">	  -a:列出本地所有镜像（包括中间映像层）**</span><br><span class="line">	  -q:只显示镜像id**</span><br><span class="line">	  --digests:显示镜像完整的描述信息</span><br><span class="line">	  --no-trunc：不截断输出</span><br></pre></td></tr></table></figure>
+<p><img src="C:\Users\x5456\AppData\Local\Temp\1533634161051.png" alt="1533634161051"></p>
+<p>同一个仓库源可以有多个tag，代表这个仓库源的不同版本，所以我们使用REPOSITORY:TAG来定义不同的镜像。</p>
+<h3 id="2）从hub上查找镜像"><a href="#2）从hub上查找镜像" class="headerlink" title="2）从hub上查找镜像"></a>2）从hub上查找镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker search 查找镜像名</span><br><span class="line">	</span><br><span class="line">	Option：</span><br><span class="line">	   --no-trunc：不截断输出</span><br><span class="line">	   -s 数字：列出星星不小于指定值的镜像</span><br><span class="line">	   --automated：列出自动构建类型的镜像</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/La6fkGi2Jl.png?imageslim" alt=""></p>
+<h3 id="3）下载镜像"><a href="#3）下载镜像" class="headerlink" title="3）下载镜像"></a>3）下载镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 版本号默认为lastest，最新版本</span><br><span class="line"><span class="meta">$</span> sudo docker pull 下载的镜像名:[版本号]</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/e6KEcJc1E5.png?imageslim" alt=""></p>
+<h3 id="4）删除镜像"><a href="#4）删除镜像" class="headerlink" title="4）删除镜像"></a>4）删除镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker rmi 某个镜像的id</span><br><span class="line">	</span><br><span class="line"><span class="meta">	#</span> 强制删除，当镜像被某个容器使用时，无法被删除</span><br><span class="line"><span class="meta">	$</span> sudo docker rmi -f 某个镜像的id</span><br><span class="line"><span class="meta">	#</span> 删除多个镜像</span><br><span class="line"><span class="meta">	$</span> sudo docker rmi 镜像id1 镜像id2...</span><br><span class="line"><span class="meta">	#</span> 删除全部镜像</span><br><span class="line"><span class="meta">	$</span> sudo docker rmi -f $(docker images -qa)	# 查出本机所有镜像的id</span><br></pre></td></tr></table></figure>
+<h2 id="3、容器命令"><a href="#3、容器命令" class="headerlink" title="3、容器命令"></a>3、容器命令</h2><h3 id="1）新建并启动容器"><a href="#1）新建并启动容器" class="headerlink" title="1）新建并启动容器"></a>1）新建并启动容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker run 镜像id</span><br><span class="line">	</span><br><span class="line">	Option：</span><br><span class="line">		--name="想要给容器起的名字"：设置容器名（可以不用写，会自动生成）</span><br><span class="line">		-d：在后台运行容器，也称守护式容器**</span><br><span class="line">		-i：以交互式运行容器，通常与-t同时使用**</span><br><span class="line">		-t：为容器分配一个伪终端，常与-i同时使用**</span><br><span class="line">		-P：随机端口映射</span><br><span class="line">		-p：指定端口映射，主要有以下4种格式</span><br><span class="line">			ip:hostPort:containerPort</span><br><span class="line">			ip::containerPort</span><br><span class="line">			hostPort:containerPort**</span><br><span class="line">			containerPort</span><br></pre></td></tr></table></figure>
+<p><strong>启动交互式容器</strong></p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/djHmH29c4C.png?imageslim" alt=""></p>
+<h3 id="2）列出Docker中有哪些容器在运行"><a href="#2）列出Docker中有哪些容器在运行" class="headerlink" title="2）列出Docker中有哪些容器在运行"></a>2）列出Docker中有哪些容器在运行</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker ps</span><br><span class="line"></span><br><span class="line">	Option:</span><br><span class="line">		-a：列出所有运行的容器（正在运行+历史运行）</span><br><span class="line">		-l：显示最近创建的容器</span><br><span class="line">		-n 数字：显示指定数字创建的容器</span><br><span class="line">		-q：静默模式，只显示容器编号**</span><br><span class="line">		--no-trunc：不截断输出</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/i7l8cd61d2.png?imageslim" alt=""></p>
+<h3 id="3）退出交互式容器"><a href="#3）退出交互式容器" class="headerlink" title="3）退出交互式容器"></a>3）退出交互式容器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 容器停止退出</span><br><span class="line">exit</span><br><span class="line"><span class="meta">#</span> 容器不停止退出</span><br><span class="line">Ctrl+P+Q</span><br></pre></td></tr></table></figure>
+<h3 id="4）其他操作"><a href="#4）其他操作" class="headerlink" title="4）其他操作"></a>4）其他操作</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 启动容器，将已经停止的容器启动</span><br><span class="line"><span class="meta">$</span> sudo docker start 容器id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 重启容器</span><br><span class="line"><span class="meta">$</span> sudo docker restart 容器id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 停止容器</span><br><span class="line"><span class="meta">$</span> sudo docker stop 容器id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 强制停止容器</span><br><span class="line"><span class="meta">$</span> sudo docker kill 容器id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 删除已经停止的容器</span><br><span class="line"><span class="meta">$</span> sudo docker rm 容器id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 强制删除所有容器（不管是否停止）</span><br><span class="line"><span class="meta">$</span> sudo docker rm -f $(docker ps -aq)</span><br><span class="line"><span class="meta">$</span> sudo docker ps -aq | xargs docker rm</span><br></pre></td></tr></table></figure>
+<h3 id="5）守护式启动"><a href="#5）守护式启动" class="headerlink" title="5）守护式启动"></a>5）守护式启动</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 上面说过了，使用-d命令启动，下面介绍注意点</span><br><span class="line"><span class="meta">$</span> sudo docker run -d 镜像id</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/eecmlmI3ci.png?imageslim" alt=""></p>
+<p>由上图发现，我们运行的容器已经退出。</p>
+<p>这个是Docker机制的问题，由于我们启动的容器中没有前台进程，而是以后台进程的形式运行的，Docker就会以为它没事干，于是就将其杀死。</p>
+<p>解决方案：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1.如果本地镜像只有一个版本，可以直接使用仓库源的名字</span><br><span class="line"><span class="meta">#</span> 2.这句命令的含义是：运行一个容器，使用/bin/sh执行后面的shell脚本</span><br><span class="line"><span class="meta">$</span> sudo docker run -d centos /bin/sh -c "while true;do echo hello x5456;sleep 2;done"</span><br></pre></td></tr></table></figure>
+<h3 id="6）查看容器日志"><a href="#6）查看容器日志" class="headerlink" title="6）查看容器日志"></a>6）查看容器日志</h3><p>查看容器内运行的进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker logs 容器编号</span><br><span class="line"></span><br><span class="line">	Option：</span><br><span class="line">		-t：加入时间戳</span><br><span class="line">		-f：跟随最新的日志打印</span><br><span class="line">		--tail 数字：显示指定数字内些条</span><br></pre></td></tr></table></figure>
+<h3 id="7）查看容器内部细节"><a href="#7）查看容器内部细节" class="headerlink" title="7）查看容器内部细节"></a>7）查看容器内部细节</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 以json格式进行显示</span><br><span class="line"><span class="meta">$</span> sudo docker inspect 容器id</span><br></pre></td></tr></table></figure>
+<h3 id="8）进入正在运行的容器并以命令行交互"><a href="#8）进入正在运行的容器并以命令行交互" class="headerlink" title="8）进入正在运行的容器并以命令行交互"></a>8）进入正在运行的容器并以命令行交互</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 容器中启动新的终端并执行命令，返回</span><br><span class="line"><span class="meta">#</span> 如果不写后面的shell脚本，则会启动新的终端</span><br><span class="line"><span class="meta">$</span> sudo docker exec -it 容器id shell脚本</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 直接进入容器，不启动新的终端</span><br><span class="line"><span class="meta">$</span> sudo docker attach 容器id</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/k7heBK7FLl.png?imageslim" alt=""></p>
+<h3 id="9）拷贝容器中的文件到本地"><a href="#9）拷贝容器中的文件到本地" class="headerlink" title="9）拷贝容器中的文件到本地"></a>9）拷贝容器中的文件到本地</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker cp 容器id:容器中文件的位置 要copy到本地的位置</span><br></pre></td></tr></table></figure>
+<h2 id="四、Docker镜像"><a href="#四、Docker镜像" class="headerlink" title="四、Docker镜像"></a>四、Docker镜像</h2><pre><code>镜像是一种轻量级、可执行的独立软件包，**用来打包软件运行环境和机基于运行环境开发的软件**，它包括某个软件所需要的所有内容（代码、库、环境变量、配置文件...）
+</code></pre><h3 id="1、UnionFS联合文件系统"><a href="#1、UnionFS联合文件系统" class="headerlink" title="1、UnionFS联合文件系统"></a>1、UnionFS联合文件系统</h3><pre><code>联合文件系统是一种分层、轻量级、高性能的文件系统，它可以一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录。
 
-block content
-  .post
-    h1.post-title= page.title
-    .post-meta= page.date.format('ll')
-      if page.categories.length > 0
-        span= ' | '
-        span.category
-          for category in page.categories.toArray()
-            a(href=url_for(category.path))= category.name
-      if theme.busuanzi == true
-        script(src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js', async)
-        span#busuanzi_container_page_pv= ' | '
-          span#busuanzi_value_page_pv
-          span= ' ' + __('Hits')
-      if theme.wordcount == true
-        include _partial/wordcount.pug
-    if theme.disqus
-      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
-    if theme.changyan
-      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
-        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
-        span= ' ' + __('Comment')
-      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
-    if theme.valine.enable
-      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
-        span.valine-comment-count(data-xid=url_for(page.path))
-        span= ' ' + __('Comment')
-    if page.toc
-      div(class='clear')
-        div(id='toc' class='toc-article')
-          div(class='toc-title')= __('contents')
-          != toc(page.content, {list_number: theme.toc_number})
-    .post-content
-      != page.content
-    if theme.donate.enable == true
-      iframe(src='/donate/?AliPayQR=' + theme.donate.alipay_qr + '&WeChatQR=' + theme.donate.wechat_qr + '&GitHub=' + theme.donate.github + '&BTCQR=' + theme.donate.btc_qr + '&BTCKEY='+ theme.donate.btc_key + '&PayPal=' + theme.donate.paypal_url, style='overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;', frameborder='0', scrolling='no')
+Docker的镜像基于UnionFS，也是由一层一层的文件系统组成。
 
-    if theme.post_copyright.enable == true
-      div
-        ul.post-copyright
-          li.post-copyright-author
-            strong= __('copyright_author_prefix')
-            = theme.post_copyright.author
-          li.post-copyright-link
-            strong= __('copyright_link_prefix')
-            a(href='/' + page.path)= page.permalink
-          li.post-copyright-license
-            strong= __('copyright_declare_prefix')
-            if theme.post_copyright.copyright_text
-              != theme.post_copyright.copyright_text
-            else
-              != __('copyright_default_text')
-      br
-
-    if theme.shareto == true
-      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
-      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
-
-    include _partial/tag.pug
-    include _partial/post_nav.pug
-
-    if page.comments
-      include _partial/comments.pug
+就像我们拉镜像的时候，实际上下载了多层。
+</code></pre><p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/GHJGe0Akd6.png?imageslim" alt=""></p>
+<h4 id="为啥tomcat会辣么大？？"><a href="#为啥tomcat会辣么大？？" class="headerlink" title="为啥tomcat会辣么大？？"></a>为啥tomcat会辣么大？？</h4><p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/51KegbA3lg.png?imageslim" alt="mark"></p>
+<h4 id="采用这种分层结构的好处"><a href="#采用这种分层结构的好处" class="headerlink" title="采用这种分层结构的好处"></a>采用这种分层结构的好处</h4><ul>
+<li>最大的一个好处就是——共享资源</li>
+</ul>
+<p>比如：有多个进行都是从相同的A镜像构建而来，那么宿主机只需要在磁盘上保存一份A镜像，内存中只需要加载一份A镜像，就可以为所有容器服务了。</p>
+<h3 id="2、生成镜像Demo"><a href="#2、生成镜像Demo" class="headerlink" title="2、生成镜像Demo"></a>2、生成镜像Demo</h3><p>1.从Hub上下载tomcat镜像到本地并运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>                 对外暴露端口 内部使用端口</span><br><span class="line"><span class="meta">$</span> sudo docker run -it -p 8888:8080 tomcat</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/dhjE49Ea8j.png?imageslim" alt="mark"></p>
+<p>2.故意删除tomcat容器的文档</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/DaC3FAbIBD.png?imageslim" alt="mark"></p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/f6DF25cl6K.png?imageslim" alt="mark"></p>
+<p>3.以当前运行的tomcat作为模板，提交生成新的镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker commit -a="作者" -m="描述信息" 容器id 要创建的镜像名:[标签名]</span><br><span class="line"><span class="meta">#</span> eg.</span><br><span class="line"><span class="meta">$</span> sudo docker commit -a="x5456" -m="del tomcat docs" 70c6fc38df47 x5456/tomcat:2.0</span><br></pre></td></tr></table></figure>
+<p>4.启动我们生成的镜像</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/CdH72b0abd.png?imageslim" alt="mark"></p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/f6DF25cl6K.png?imageslim" alt="mark"></p>
+<h2 id="五、Docker的数据管理"><a href="#五、Docker的数据管理" class="headerlink" title="五、Docker的数据管理"></a>五、Docker的数据管理</h2><p>部分参考于：<a href="https://www.cnblogs.com/wade-luffy/p/6542539.html" target="_blank" rel="noopener">这里</a></p>
+<p>生产环境中使用Docker的过程中，容器中会产生数据，如果不通过commit命令生成一个新的镜像，当容器删除后，其中数据就没有了，所以我们往往需要<strong>对数据进行持久化</strong>，或者需要在<strong>多个容器之间进行数据共享</strong>，这必然涉及容器的数据管理操作。</p>
+<p>容器中管理数据主要有两种方式：</p>
+<ol>
+<li>数据卷（Data Volumes）：<strong>容器内数据直接映射到本地主机环境</strong>；如何在容器内创建数据卷，并且把本地的目录或文件挂载到容器内的数据卷中。</li>
+<li>数据卷容器（Data Volume Containers）：使用特定容器维护数据卷。如何<strong>使用数据卷容器在容器和主机、容器和容器之间共享数据</strong>，并实现数据的备份和恢复。</li>
+</ol>
+<h3 id="1、数据卷"><a href="#1、数据卷" class="headerlink" title="1、数据卷"></a>1、数据卷</h3><h4 id="1）使用命令添加"><a href="#1）使用命令添加" class="headerlink" title="1）使用命令添加"></a>1）使用命令添加</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker run -v 宿主机绝对路径:容器内目录 镜像id/镜像名</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 这样宿主机和容器中的这两个目录就联系起来了</span><br><span class="line"><span class="meta">$</span> sudo docker run -v /myData:/ContainerData centos</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 可以在目录后面加上:ro表示只读，这样有:ro的内个目录就只有read权限</span><br><span class="line"><span class="meta">$</span> sudo docker run -v /myData:/ContainerData:ro centos</span><br></pre></td></tr></table></figure>
+<h4 id="2）采用DockerFile进行添加"><a href="#2）采用DockerFile进行添加" class="headerlink" title="2）采用DockerFile进行添加"></a>2）采用DockerFile进行添加</h4><p>1.书写DockerFile文件dockerfile2</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">VOLUME ["/dataVolumeContainer1","/dataVolumeContainer2"]</span><br><span class="line">CMD echo "finished,--------success1"</span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></table></figure>
+<p>2.使用命令生成镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker build -f dockerfile2 -t x5456/centos .</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/EFaj80cigI.png?imageslim" alt="mark"></p>
+<p>3.由于我们上面命令没有指定宿主机的位置，所以我们需要查看容器详细信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker inspect 724f7b7a9793</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/bbeh4KiJ8H.png?imageslim" alt="mark"></p>
+<h3 id="2、数据卷容器"><a href="#2、数据卷容器" class="headerlink" title="2、数据卷容器"></a>2、数据卷容器</h3><pre><code>如果用户需要在**多个容器之间共享一些持续更新的数据**，最简单的方式是使用数据卷容器。数据卷容器也是一个容器，但是它的目的是专门用来提供数据卷供其他容器挂载。
+</code></pre><p>1.创建一个数据卷容器dbdata，并在其中创建一个数据卷挂载到/dbdata：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -it -v /dbdata --name dbdata centos</span><br><span class="line">root@3ed94f279b6f:/#</span><br></pre></td></tr></table></figure>
+<p>2.查看/dbdata目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@3ed94f279b6f:/# ls</span><br><span class="line"></span><br><span class="line">bin  boot  **dbdata**  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run sbin  srv  sys  tmp  usr  var</span><br></pre></td></tr></table></figure>
+<p>3.在其他容器中使用–volumes-from来挂载dbdata容器中的数据卷.</p>
+<p>例如创建db1和db2两个容器，并从dbdata容器挂载数据卷：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -it --volumes-from dbdata --name db1 ubuntu</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> docker run -it --volumes-from dbdata --name db2 ubuntu</span><br></pre></td></tr></table></figure>
+<p>此时，容器db1和db2都挂载同一个数据卷到相同的/dbdata目录。三个容器任何一方在该目录下的写入，其他容器都可以看到。</p>
+<p>例如，在dbdata容器中创建一个test文件，如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@3ed94f279b6f:/# cd /dbdata</span><br><span class="line"></span><br><span class="line">root@3ed94f279b6f:/dbdata# touch test</span><br><span class="line"></span><br><span class="line">root@3ed94f279b6f:/dbdata# ls</span><br><span class="line"></span><br><span class="line">test</span><br></pre></td></tr></table></figure>
+<p>在db1容器内查看它：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -it --volumes-from dbdata --name db1  ubuntu</span><br><span class="line"></span><br><span class="line">root@4128d2d804b4:/# ls</span><br><span class="line">bin  boot  dbdata  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line"></span><br><span class="line">root@4128d2d804b4:/# ls dbdata/</span><br><span class="line">test</span><br></pre></td></tr></table></figure>
+<p>4.<strong>数据卷的生命周期一直会持续到没有容器使用他时</strong></p>
+<h2 id="六、Dockerfile"><a href="#六、Dockerfile" class="headerlink" title="六、Dockerfile"></a>六、Dockerfile</h2><p>Dockerfile是用来构建Docker镜像的构建文件，是由一系列命令和参数构成的脚本。</p>
+<h3 id="1、Dockerfile基础知识："><a href="#1、Dockerfile基础知识：" class="headerlink" title="1、Dockerfile基础知识："></a>1、Dockerfile基础知识：</h3><p>1）每条保留字指令都必须是大写字母且后面要跟随至少一个参数</p>
+<p>2）指令从上到下顺序执行</p>
+<p>3）#表示注释</p>
+<p>4）<strong>==每条指令都会创建一个新的镜像层，并对镜像进行提交==</strong></p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/2DI3gCkELD.png?imageslim" alt=""></p>
+<h3 id="2、Docker执行Dockerfile的流程"><a href="#2、Docker执行Dockerfile的流程" class="headerlink" title="2、Docker执行Dockerfile的流程"></a>2、Docker执行Dockerfile的流程</h3><p>1）Docker从基础镜像运行一个容器</p>
+<p>2）执行一条指令就对容器进行修改</p>
+<p>3）执行完一条指令就使用类似docker commit的操作提交一个新的==<strong>镜像层</strong>==</p>
+<p>4）docker再基于刚刚提交的==<strong>镜像</strong>==运行一个新容器</p>
+<ul>
+<li>由于镜像是由多个镜像层组成的，所以提交一个镜像层 &lt;==&gt; 生成了一个新镜像</li>
+</ul>
+<p>5）继续执行下一条指令，直到所有指令都执行完毕</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/6elIAjK31A.png?imageslim" alt="mark"></p>
+<p>从应用软件的角度上来看，Dockerfile、Docker镜像与Docker容器分别代表软件的三个不同阶段</p>
+<ul>
+<li>Dockerfile：软件原材料，面向开发<ul>
+<li>Docker镜像：软件的交付品</li>
+<li>Docker容器：软件运行状态</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/Gf64bBGCc1.png?imageslim" alt="mark"></p>
+<h3 id="3、Dockerfile的保留字指令"><a href="#3、Dockerfile的保留字指令" class="headerlink" title="3、Dockerfile的保留字指令"></a>3、Dockerfile的保留字指令</h3><h4 id="1）FROM"><a href="#1）FROM" class="headerlink" title="1）FROM"></a>1）FROM</h4><p>基础镜像，当前镜像是基于哪个镜像的</p>
+<h4 id="2）MAINTAINER"><a href="#2）MAINTAINER" class="headerlink" title="2）MAINTAINER"></a>2）MAINTAINER</h4><p>镜像维护者的姓名和邮箱地址</p>
+<h4 id="3）RUN"><a href="#3）RUN" class="headerlink" title="3）RUN"></a>3）RUN</h4><p>容器构建时需要运行的命令</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/hGEDAKL4m9.png?imageslim" alt="mark"></p>
+<h4 id="4）EXPOSE"><a href="#4）EXPOSE" class="headerlink" title="4）EXPOSE"></a>4）EXPOSE</h4><p> 容器对外暴露的端口</p>
+<h4 id="5）WORKDIR"><a href="#5）WORKDIR" class="headerlink" title="5）WORKDIR"></a>5）WORKDIR</h4><p>指定创建容器后，终端默认登陆进来的工作目录</p>
+<h4 id="6）ENV"><a href="#6）ENV" class="headerlink" title="6）ENV"></a>6）ENV</h4><p>在构建镜像过程中设置环境变量</p>
+<p>eg：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 声明一个环境变量，这个变量可以在后续的任何指令中使用</span></span><br><span class="line"><span class="keyword">ENV</span> MY_PATH /usr/test</span><br><span class="line"><span class="comment"># 比如设置工作目录</span></span><br><span class="line"><span class="keyword">WORKDIR</span>	$MY_PATH</span><br></pre></td></tr></table></figure>
+<h4 id="7）ADD"><a href="#7）ADD" class="headerlink" title="7）ADD"></a>7）ADD</h4><p>将宿主机目录下的文件copy进镜像，而且ADD命令会自动处理URL和解压压缩包</p>
+<h4 id="8）COPY"><a href="#8）COPY" class="headerlink" title="8）COPY"></a>8）COPY</h4><p>将文件copy到镜像中</p>
+<h4 id="9）VOLUME"><a href="#9）VOLUME" class="headerlink" title="9）VOLUME"></a>9）VOLUME</h4><p>容器数据卷，用于数据的保存和持久化工作</p>
+<h4 id="10）CMD"><a href="#10）CMD" class="headerlink" title="10）CMD"></a>10）CMD</h4><p>指定容器启动时要运行的命令</p>
+<ul>
+<li>Dockerfile中可以<strong>有多个CMD指令，但只有最后一个生效</strong>，CMD会被docker run之后的参数==替换==<ul>
+<li>类似docker run /bin/sh xxx这种</li>
+</ul>
+</li>
+</ul>
+<h4 id="11）ENTRYPOINT"><a href="#11）ENTRYPOINT" class="headerlink" title="11）ENTRYPOINT"></a>11）ENTRYPOINT</h4><p>指定容器启动时要运行的命令</p>
+<ul>
+<li>ENTRYPOINT会==追加==docker run之后的参数</li>
+</ul>
+<h4 id="12）ONBUILD"><a href="#12）ONBUILD" class="headerlink" title="12）ONBUILD"></a>12）ONBUILD</h4><p>当构建一个被继承的Dockerfile时运行的命令，父镜像在被子镜像继承后触发这个命令</p>
+<h2 id="七、将镜像发布到阿里云上"><a href="#七、将镜像发布到阿里云上" class="headerlink" title="七、将镜像发布到阿里云上"></a>七、将镜像发布到阿里云上</h2><p>1.创建镜像仓库</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/ji2EFFIFBk.png?imageslim" alt="mark"></p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/Ih9B2LC7ac.png?imageslim" alt="mark"></p>
+<p>2.将镜像推送到阿里云上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker login --username=1203901753@qq.com registry.cn-hangzhou.aliyuncs.com</span><br><span class="line"><span class="meta">#</span>                 本地镜像id                                        想要在阿里云上显示的版本号</span><br><span class="line"><span class="meta">$</span> sudo docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/x5456/centos:[镜像版本号]</span><br><span class="line"><span class="meta">$</span> sudo docker push registry.cn-hangzhou.aliyuncs.com/x5456/centos:[镜像版本号]</span><br></pre></td></tr></table></figure>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/8kFIAlBGe5.png?imageslim" alt="mark"></p>
+<p>3.在阿里云上查看</p>
+<p><img src="http://pfdxc2ax8.bkt.clouddn.com/blog/181005/f533CBd7kE.png?imageslim" alt="mark"></p>
+</div><div class="tags"><a href="/tags/docker/">docker</a></div><div class="post-nav"><a class="pre" href="/2018/08/23/CentOS7下安装Oracle/">CentOS7下安装Oracle</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://x54256.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Gitlab/" style="font-size: 15px;">Gitlab</a> <a href="/tags/日常笔记/" style="font-size: 15px;">日常笔记</a> <a href="/tags/dubbo/" style="font-size: 15px;">dubbo</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/29/SpringBoot+SpringDataJpa进阶/">Jpa的分页和@Query注解的使用和复杂查询，boot排除自动配置类，为true才启用配置类，SQL分组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/28/CORS的原理及整合SpringBoot/">CORS的原理及整合SpringBoot</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/BS运维/">日常笔记：Dubbo的Filter，httpclient发送webservice请求，Hibranate注解使用，OSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/Spring注解使用 /">Spring注解使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/SpringBoot与Redis的整合/">SpringBoot与Redis的整合</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/24/gitlab+idea的使用/">Idea中使用Gitlab</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/11/Gradle+idea配置/">Gradle+idea的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/03/Dubbo/">Dubbo的使用，以及整合springboot</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/CentOS7下安装Oracle/">CentOS7下安装Oracle</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/21/Docker学习/">Docker入门使用</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.cnblogs.com/x54256" title="cnblogs" target="_blank">cnblogs</a><ul></ul><a href="https://github.com/x54256" title="git" target="_blank">git</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">x5456.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

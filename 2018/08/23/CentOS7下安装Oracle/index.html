@@ -1,68 +1,37 @@
-extends base
-
-block title
-  title= page.title + ' | ' + config.title
-
-block content
-  .post
-    h1.post-title= page.title
-    .post-meta= page.date.format('ll')
-      if page.categories.length > 0
-        span= ' | '
-        span.category
-          for category in page.categories.toArray()
-            a(href=url_for(category.path))= category.name
-      if theme.busuanzi == true
-        script(src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js', async)
-        span#busuanzi_container_page_pv= ' | '
-          span#busuanzi_value_page_pv
-          span= ' ' + __('Hits')
-      if theme.wordcount == true
-        include _partial/wordcount.pug
-    if theme.disqus
-      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
-    if theme.changyan
-      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
-        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
-        span= ' ' + __('Comment')
-      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
-    if theme.valine.enable
-      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
-        span.valine-comment-count(data-xid=url_for(page.path))
-        span= ' ' + __('Comment')
-    if page.toc
-      div(class='clear')
-        div(id='toc' class='toc-article')
-          div(class='toc-title')= __('contents')
-          != toc(page.content, {list_number: theme.toc_number})
-    .post-content
-      != page.content
-    if theme.donate.enable == true
-      iframe(src='/donate/?AliPayQR=' + theme.donate.alipay_qr + '&WeChatQR=' + theme.donate.wechat_qr + '&GitHub=' + theme.donate.github + '&BTCQR=' + theme.donate.btc_qr + '&BTCKEY='+ theme.donate.btc_key + '&PayPal=' + theme.donate.paypal_url, style='overflow-x:hidden; overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;', frameborder='0', scrolling='no')
-
-    if theme.post_copyright.enable == true
-      div
-        ul.post-copyright
-          li.post-copyright-author
-            strong= __('copyright_author_prefix')
-            = theme.post_copyright.author
-          li.post-copyright-link
-            strong= __('copyright_link_prefix')
-            a(href='/' + page.path)= page.permalink
-          li.post-copyright-license
-            strong= __('copyright_declare_prefix')
-            if theme.post_copyright.copyright_text
-              != theme.post_copyright.copyright_text
-            else
-              != __('copyright_default_text')
-      br
-
-    if theme.shareto == true
-      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
-      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
-
-    include _partial/tag.pug
-    include _partial/post_nav.pug
-
-    if page.comments
-      include _partial/comments.pug
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>CentOS7下安装Oracle | x5456</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">CentOS7下安装Oracle</h1><a id="logo" href="/.">x5456</a><p class="description">x54256的博客</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">CentOS7下安装Oracle</h1><div class="post-meta">Aug 23, 2018</div><div class="post-content"><h3 id="1-安装Docker"><a href="#1-安装Docker" class="headerlink" title="1/安装Docker"></a>1/安装Docker</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> step 1: 安装必要的一些系统工具</span><br><span class="line">sudo yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line"><span class="meta">#</span> Step 2: 添加软件源信息</span><br><span class="line">sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line"><span class="meta">#</span> Step 3: 更新并安装 Docker-CE</span><br><span class="line">sudo yum makecache fast</span><br><span class="line">sudo yum -y install docker-ce</span><br><span class="line"><span class="meta">#</span> Step 4: 开启Docker服务</span><br><span class="line">sudo service docker start</span><br></pre></td></tr></table></figure>
+<h3 id="2-配置镜像加速器"><a href="#2-配置镜像加速器" class="headerlink" title="2/配置镜像加速器"></a>2/配置镜像加速器</h3><p>访问<a href="https://cr.console.aliyun.com/cn-hangzhou/mirrors" target="_blank" rel="noopener">网址</a>获取个人的加速器地址</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-'EOF'</span><br><span class="line">&#123;</span><br><span class="line">  "registry-mirrors": ["https://l7s5cnt9.mirror.aliyuncs.com"]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+<h3 id="3-下载镜像"><a href="#3-下载镜像" class="headerlink" title="3/下载镜像"></a>3/下载镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull filemon/oracle_11g</span><br></pre></td></tr></table></figure>
+<h3 id="4-启动镜像"><a href="#4-启动镜像" class="headerlink" title="4/启动镜像"></a>4/启动镜像</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 直接启动，没做映射</span><br><span class="line"><span class="meta">$</span> sudo docker run -d -p 11521:1521 -p 10022:22 --name=oracle11g filemon/oracle_11g</span><br></pre></td></tr></table></figure>
+<h3 id="5-对容器进行一系列的操作"><a href="#5-对容器进行一系列的操作" class="headerlink" title="5/对容器进行一系列的操作"></a>5/对容器进行一系列的操作</h3><p>1）进入容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sudo docker exec -it 容器ID /bin/bash</span><br></pre></td></tr></table></figure>
+<p>2）配置系统环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> vi ~/.bash_profile</span><br><span class="line"></span><br><span class="line">export ORACLE_SID=orcl</span><br><span class="line">export ORACLE_HOME=/home/oracle/app/oracle/product/11.2.0/dbhome_2</span><br><span class="line">export PATH=$ORACLE_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p>3）加载环境变量 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /home/oracle/.bash_profile</span><br></pre></td></tr></table></figure>
+<p>4）登陆</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 无账号登陆</span></span><br><span class="line">sqlplus /nolog</span><br><span class="line">connect /as sysdba</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 设置sys和system的密码</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> <span class="keyword">sys</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">"sys"</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> <span class="keyword">system</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">"sys"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 本地远程连接</span></span><br><span class="line">sqlplus <span class="keyword">sys</span>/<span class="keyword">sys</span>@<span class="number">52.83</span><span class="number">.134</span><span class="number">.236</span>:<span class="number">1521</span>/orcl <span class="keyword">as</span> <span class="keyword">sysdba</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>实例名(SID )</th>
+<th>orcl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>管理员帐号</td>
+<td>sys/sys</td>
+</tr>
+<tr>
+<td>字符集</td>
+<td>utf-8</td>
+</tr>
+<tr>
+<td>端口</td>
+<td>1521</td>
+</tr>
+</tbody>
+</table>
+<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker: Error response from daemon: failed to copy files: copy file range failed: no space left on device.</span><br><span class="line"></span><br><span class="line">解决方法：</span><br><span class="line"><span class="meta">#</span> docker volume rm $(docker volume ls -qf dangling=true)</span><br></pre></td></tr></table></figure>
+</div><div class="tags"><a href="/tags/docker/">docker</a></div><div class="post-nav"><a class="pre" href="/2018/09/03/Dubbo/">Dubbo的使用，以及整合springboot</a><a class="next" href="/2018/08/21/Docker学习/">Docker入门使用</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://x54256.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Gitlab/" style="font-size: 15px;">Gitlab</a> <a href="/tags/日常笔记/" style="font-size: 15px;">日常笔记</a> <a href="/tags/dubbo/" style="font-size: 15px;">dubbo</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/09/29/SpringBoot+SpringDataJpa进阶/">Jpa的分页和@Query注解的使用和复杂查询，boot排除自动配置类，为true才启用配置类，SQL分组的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/28/CORS的原理及整合SpringBoot/">CORS的原理及整合SpringBoot</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/BS运维/">日常笔记：Dubbo的Filter，httpclient发送webservice请求，Hibranate注解使用，OSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/27/Spring注解使用 /">Spring注解使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/26/SpringBoot与Redis的整合/">SpringBoot与Redis的整合</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/24/gitlab+idea的使用/">Idea中使用Gitlab</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/11/Gradle+idea配置/">Gradle+idea的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/03/Dubbo/">Dubbo的使用，以及整合springboot</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/CentOS7下安装Oracle/">CentOS7下安装Oracle</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/21/Docker学习/">Docker入门使用</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.cnblogs.com/x54256" title="cnblogs" target="_blank">cnblogs</a><ul></ul><a href="https://github.com/x54256" title="git" target="_blank">git</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">x5456.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
