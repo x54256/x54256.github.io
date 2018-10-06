@@ -4,7 +4,7 @@
 <p><strong>注意：只能通过setter方式来注入其他的bean，且不要标注注解！</strong></p>
 <p>dubbo自己会对这些bean进行注入，不需要再标注@Resource让Spring注入，参见扩展点加载</p>
 <h4 id="第二步：配置文件"><a href="#第二步：配置文件" class="headerlink" title="第二步：配置文件"></a>第二步：<a href="http://dubbo.apache.org/zh-cn/docs/dev/impls/filter.html" target="_blank" rel="noopener">配置文件</a></h4><p>在resources目录下添加纯文本文件META-INF/dubbo/com.alibaba.dubbo.rpc.Filter，内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxxFilter=com.xxx.AuthorityFilter</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxxFilter=cn.x5456.xxxFilter</span><br></pre></td></tr></table></figure>
 <p>修改dubbo的provider配置文件，在dubbo:provider中添加配置的filter，如下：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:provider</span> <span class="attr">filter</span>=<span class="string">"xxxFilter"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 <p><a href="https://blog.csdn.net/meilong_whpu/article/details/72179453" target="_blank" rel="noopener">扩展点加载机制</a></p>
